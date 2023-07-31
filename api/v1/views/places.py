@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-
+"""view for Place objects that handles all default RESTFul API actions"""
 
 from flask import jsonify, request, abort
 from models import storage
@@ -9,23 +9,27 @@ from models.user import User
 from api.v1.views import app_views
 
 
-@app_views.route('/cities/<city_id>/places', methods=['GET'], strict_slashes=False)
+@app_views.route('/cit:', methods=['GET'])
 def get_city_places(city_id):
-    city = storage.get(City, city_id)
-    if city is None:
+    """Retrieves the list of all Place objects of a City"""
+    try:
+        city = storage.all(City)
+    except Exception:
         abort(404)
     return jsonify([place.to_dict() for place in city.places])
 
 
-@app_views.route('/places/<place_id>', methods=['GET'], strict_slashes=False)
+@app_views.route('/places/<place_id>', methods=['GET'])
 def get_place(place_id):
-    place = storage.get(Place, place_id)
-    if place is None:
+    """Retrieves a Place object by id"""
+    try:
+        place = storage.get(Place, place_id)
+    except Exception:
         abort(404)
     return jsonify(place.to_dict())
 
 
-@app_views.route('/places/<place_id>', methods=['DELETE'], strict_slashes=False)
+@app_views.route('/places/<place_id>', methods=['DELETE'])
 def delete_place(place_id):
     place = storage.get(Place, place_id)
     if place is None:
