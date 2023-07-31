@@ -73,7 +73,6 @@ class DBStorage:
         """Count the number of objects in storage matching the given class."""
         return len(self.all(cls))
 
-
     def reload(self):
         """reloads data from the database"""
         Base.metadata.create_all(self.__engine)
