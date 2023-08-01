@@ -5,6 +5,7 @@ from models.state import State
 from models import storage
 from api.v1.views import app_views
 from flask import abort, request, jsonify
+import json
 
 
 @app_views.route("/states", methods=['GET'])
@@ -50,7 +51,7 @@ def create_state():
         name = request.get_json()
     except Exception:
         abort(400, 'Not a JSON')
-    if 'name' not in mame.keys() or name['name'] is None:
+    if 'name' not in name.keys() or name['name'] is None:
         abort(400, 'Missing name')
     state = State(name=name['name'])
     storage.new(state)
@@ -67,9 +68,12 @@ def update_state(state_id):
             raise AttributeError
     except Exception:
         abort(404)
-    name = request.get_json()
-    if name is None:
+    try:
+        name = request.get_json()
+    except Exception:
         abort(400, 'Not a JSON')
+    if 'name' not in name.keys() or name is None:
+        abort(400, 'Missing name')
     for key, value in name.items():
         if (key not in ('id', 'created_at', 'updated_at')):
             setattr(state, key, value)
