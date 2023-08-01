@@ -73,7 +73,7 @@ def create_review(place_id):
     if 'text' not in name.keys() or name['text'] is None:
         abort(400, 'Missing text')
     n_review = {'text': name['text'], 'user_id': usr.id, 'place_id': place.id}
-    review  = Review(**n_review)
+    review = Review(**n_review)
     storage.new(review)
     storage.save()
     return jsonify(review.to_dict()), 201
