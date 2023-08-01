@@ -19,7 +19,7 @@ def close_db(Exception):
 @app.errorhandler(404)
 def not_found(error):
     """returns a JSON-formatted 404 status code response"""
-    return jsonify({'error': 'not found'})
+    return jsonify({'error': 'Not found'}), 404
 
 
 @app.errorhandler(400)
