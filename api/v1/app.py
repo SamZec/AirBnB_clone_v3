@@ -25,7 +25,7 @@ def not_found(error):
 @app.errorhandler(400)
 def request_body_error(error):
     """return json formatted 400 status coode"""
-    return jsonify({'400': error.description})
+    return jsonify({'400': error.description}), 400
 
 
 port = 5000
