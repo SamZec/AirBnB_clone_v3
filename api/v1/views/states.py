@@ -33,12 +33,14 @@ def delete_state(state_id):
     """Deletes a State by id"""
     try:
         state = storage.get(State, state_id)
+        if state is None:
+            raise AttributeError
         storage.delete(state)
         storage.save()
         res = {}
     except Exception:
         abort(404)
-    return jsonify(res), 200
+    return jsonify(res)
 
 
 @app_views.route('/states/', methods=['POST'])
@@ -48,7 +50,7 @@ def create_state():
         name = request.get_json()
     except Exception:
         abort(400, 'Not a JSON')
-    if 'name' not in name.keys():
+    if 'name' not in mame.keys() or name['name'] is None:
         abort(400, 'Missing name')
     state = State(name=name['name'])
     storage.new(state)
@@ -61,6 +63,8 @@ def update_state(state_id):
     """Updates a State by id"""
     try:
         state = storage.get(State, state_id)
+        if state is None:
+            raise AttributeError
     except Exception:
         abort(404)
     name = request.get_json()
