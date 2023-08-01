@@ -51,7 +51,6 @@ def delete_city(city_id):
 
 def create_city(state_id):
     """Creates a City"""
-    print(state_id)
     try:
         state = storage.get(State, state_id)
         if state is None:
