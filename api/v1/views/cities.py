@@ -8,9 +8,11 @@ from api.v1.views import app_views
 from flask import abort, request, jsonify
 
 
-@app_views.route("/states/<state_id>/cities", methods=['GET'])
+@app_views.route("/states/<state_id>/cities", methods=['GET', 'POST'])
 def list_cities(state_id):
     """list of all City objects by State id"""
+    if request.method == 'POST':
+        return create_city(state_id)
     try:
         state = storage.get(State, state_id)
     except Exception:
@@ -47,18 +49,20 @@ def delete_city(city_id):
     return jsonify(res), 200
 
 
-@app_views.route('/states/<state_id>/cities', methods=['POST'])
 def create_city(state_id):
     """Creates a City"""
+    print(state_id)
     try:
         state = storage.get(State, state_id)
+        if state is None:
+            raise AttributeError
     except Exception:
         abort(404)
     try:
         name = request.get_json()
     except Exception:
         abort(400, 'Not a JSON')
-    if 'name' not in name.keys():
+    if 'name' not in name.keys() or name['name'] is None:
         abort(400, 'Missing name')
     create_city = {'name': name['name'], 'state_id': state.id}
     city = City(**create_city)
